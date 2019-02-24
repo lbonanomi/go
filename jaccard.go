@@ -7,21 +7,21 @@ import (
 	"strings"
 )
 
-var list1  map[string]int			    // Vars must be defined
-var list2 map[string]int			    //
-var longlist map[string]int		    //
-						                      //
-func main() {					            //
-						                      //
+var list1  map[string]int			// Vars must be defined
+var list2 map[string]int	                //
+var longlist map[string]int		        //
+				                //
+func main() {					//
+						//
 	list1 = make(map[string]int)		// and instanced seperately
 	list2 = make(map[string]int)		//
 	longlist = make(map[string]int)
 
 
-	for argc,argv := range(os.Args) {				             // foreach argv
-		if argc > 0 {						                           // skip argv[0]
+	for argc,argv := range(os.Args) {				   // foreach argv
+		if argc > 0 {						   // skip argv[0]
 			if _,x := os.Stat(argv); !os.IsNotExist(x) {	   // if existing file
-				dat,_ := ioutil.ReadFile(argv)		             // read into memory
+				dat,_ := ioutil.ReadFile(argv)		   // read into memory
 
 				arr := strings.Split(string(dat), "\n")
 
