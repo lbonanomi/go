@@ -1,84 +1,103 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
-	"math"
-	"os"
-	"strings"
+        "fmt"
+        "math"
+        "io/ioutil"
+        "os"
+        "strings"
 )
 
+func vectorize(a []string) (words map[string]int) {
+        // Convert a string into a map of words:word-counts
+
+        var returned_words map[string]int
+        returned_words = make(map[string]int)
+
+        for _,word := range(a) {
+                aCount := 0
+
+                for _,subA := range(a) {
+                        if subA == word {
+                                aCount = aCount + 1
+                        }
+                }
+                returned_words[word] = aCount
+                returned_words[word] = aCount
+        }
+
+        words = returned_words
+
+        return
+}
 
 func cosine(a, b []string) (cosineSimilarity float64) {
-	//
-	// Calculate intersection
-	//
+        aa := vectorize(a)
+        bb := vectorize(b)
 
-	var intersection map[string]int
-	intersection = make(map[string]int)
+        // All of this to make a set...
+        //
 
-	var uniqA map[string]int
-	uniqA = make(map[string]int)
+        var keys []string
 
-	var uniqB map[string]int
-	uniqB = make(map[string]int)
+        for k := range aa {
+                pf := 1
 
+                for _,y := range(keys) {
+                        if k == y {
+                                pf = 0
+                        }
+                }
 
-	for _,z := range(a) {
-		intersection[z] = intersection[z] + 1
-		uniqA[z] = uniqA[z] + 1
-	}
+                if pf == 1 {
+                        keys = append(keys, k)
+                }
+        }
 
-	for _,z := range(b) {
-		intersection[z] = intersection[z] + 1
-		uniqB[z] = uniqB[z] + 1
-	}
+        for k := range bb {
+                pf := 1
 
+                for _,y := range(keys) {
+                        if k == y {
+                                pf = 0
+                        }
+                }
 
-	// Count duplicated vaues as 'numerator'
-	//
+                if pf == 1 {
+                        keys = append(keys, k)
+                }
+        }
 
-	numerator := 0
+        // Here's our set
 
-	for _,z := range(intersection) {
-		if z > 1 {
-			numerator = numerator + 1
-		}
-	}
+        numerator := 0
+        denominatorA := 0.0
+        denominatorB := 0.0
 
-	aSum := 0
-	bSum := 0
+        for _,y := range(keys) {
+                powerA := math.Pow(float64(aa[y]), 2)
+                powerB  := math.Pow(float64(bb[y]), 2)
 
-	for _,cat := range(uniqA) {
-		powered := math.Pow(float64(cat), 2)
-		aSum += int(powered)
-	}
+                denominatorA = denominatorA + powerA
+                denominatorB = denominatorB + powerB
 
-	for _,cat := range(uniqB) {
-		powered := math.Pow(float64(cat), 2)
-		bSum += int(powered)
-	}
+                numerator = numerator + (aa[y] * bb[y])
+        }
 
-	aFloat := float64(aSum)
-	bFloat := float64(bSum)
+        denominator := math.Sqrt(denominatorA) * math.Sqrt(denominatorB)
 
-	denominator := math.Sqrt(aFloat) * math.Sqrt(bFloat)
+        cosineSimilarity = float64(numerator) / denominator
 
-	cosineSimilarity = float64(numerator) / denominator
-
-	return
+        return
 }
 
 func main() {
-	aDat,_ := ioutil.ReadFile(os.Args[1])
-	a := strings.Split(string(aDat), "\n")
-	
-	bDat,_ := ioutil.ReadFile(os.Args[2])
-	b := strings.Split(string(bDat), "\n")
+        aDat,_ := ioutil.ReadFile(os.Args[1])
+        a := strings.Fields(string(aDat)) //, "\n")
 
-	cozy := cosine(a, b)
+        bDat,_ := ioutil.ReadFile(os.Args[2])
+        b := strings.Fields(string(bDat)) //, "\n")
 
-	if cozy > 0.75 {
-		fmt.Println(cozy)
-	}
+        cozy := int(cosine(a, b) * 100)
+        fmt.Println(cozy)
 }
