@@ -93,11 +93,15 @@ func cosine(a, b []string) (cosineSimilarity float64) {
 
 func main() {
 
-        var pen []string
-
         arguments := os.Args[1:]
 
         for _, topitem := range arguments {
+
+                var piggy []string
+
+                //fmt.Print(topitem, " ")
+                piggy = append(piggy, topitem)
+
                 for _, bottomitem := range arguments {
                         if topitem != bottomitem {
                                 topType, _ := os.Stat(topitem)
@@ -112,34 +116,22 @@ func main() {
 
                                         cozy := int(cosine(a, b) * 100)
 
-                                        if cozy > 85 {
-                                                topfound := 0
-                                                botfound := 0
+                                        //fmt.Println(topitem, bottomitem, cozy)
 
-                                                for _, penned := range pen {
-                                                        if topitem == penned {
-                                                                topfound = 1
-                                                        }
-
-                                                        if bottomitem == penned {
-                                                                botfound = 1
-                                                        }
-                                                }
-
-                                                if topfound == 0 {
-                                                        pen = append(pen, topitem)
-                                                }
-
-                                                if botfound == 0 {
-                                                        pen = append(pen, bottomitem)
-                                                }
+                                        if cozy > 80 {
+                                            //fmt.Println(topitem, bottomitem, cozy)
+                                            fmt.Print(bottomitem, " ")
+                                            piggy = append(piggy, bottomitem)
                                         }
                                 }
                         }
                 }
                 new := arguments[1:]
                 arguments = new
-        }
 
-        fmt.Println(strings.Join(pen, " "))
+                if len(piggy) > 1 {
+                    fmt.Println(strings.Join(piggy, " "), "has", len(piggy), "things")
+                }
+        }
 }
+
