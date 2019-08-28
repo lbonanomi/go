@@ -5,6 +5,7 @@ import (
         "io/ioutil"
         "math"
         "os"
+                //"sort"
         "strings"
 )
 
@@ -95,12 +96,12 @@ func main() {
 
         arguments := os.Args[1:]
 
+                var bacon []string
+
         for _, topitem := range arguments {
+                                var piggy []string
 
-                var piggy []string
-
-                //fmt.Print(topitem, " ")
-                piggy = append(piggy, topitem)
+                                piggy = append(piggy, topitem)
 
                 for _, bottomitem := range arguments {
                         if topitem != bottomitem {
@@ -116,12 +117,9 @@ func main() {
 
                                         cozy := int(cosine(a, b) * 100)
 
-                                        //fmt.Println(topitem, bottomitem, cozy)
-
                                         if cozy > 80 {
-                                            //fmt.Println(topitem, bottomitem, cozy)
-                                            fmt.Print(bottomitem, " ")
-                                            piggy = append(piggy, bottomitem)
+                                                                                        //fmt.Print(bottomitem, " ")
+                                                                                        piggy = append(piggy, bottomitem)
                                         }
                                 }
                         }
@@ -129,9 +127,22 @@ func main() {
                 new := arguments[1:]
                 arguments = new
 
-                if len(piggy) > 1 {
-                    fmt.Println(strings.Join(piggy, " "), "has", len(piggy), "things")
-                }
-        }
-}
+                                if len(piggy) > 1 {
+                                        repeat := 0
 
+                                        for _, rasher := range bacon {
+                                                if strings.Contains(rasher, strings.Join(piggy, " ")) {
+                                                        repeat = 1
+                                                }
+                                        }
+
+                                        if repeat == 0 {
+                                                bacon = append(bacon, strings.Join(piggy, " "))
+                                        }
+                                }
+        }
+
+                for _, rasher := range bacon {
+                        fmt.Println(rasher)
+                }
+}
