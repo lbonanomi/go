@@ -5,7 +5,6 @@ import (
         "io/ioutil"
         "math"
         "os"
-                //"sort"
         "strings"
 )
 
@@ -93,15 +92,14 @@ func cosine(a, b []string) (cosineSimilarity float64) {
 }
 
 func main() {
-
         arguments := os.Args[1:]
 
-                var bacon []string
+        var matched_set []string
 
         for _, topitem := range arguments {
-                                var piggy []string
+                var matched_files []string
 
-                                piggy = append(piggy, topitem)
+                matched_files = append(matched_files, topitem)
 
                 for _, bottomitem := range arguments {
                         if topitem != bottomitem {
@@ -110,16 +108,13 @@ func main() {
 
                                 if topType.Mode().IsRegular() && botType.Mode().IsRegular() {
                                         aDat, _ := ioutil.ReadFile(topitem)
-                                        a := strings.Fields(string(aDat)) //, "\n")
+                                        a := strings.Fields(string(aDat))
 
                                         bDat, _ := ioutil.ReadFile(bottomitem)
-                                        b := strings.Fields(string(bDat)) //, "\n")
+                                        b := strings.Fields(string(bDat))
 
-                                        cozy := int(cosine(a, b) * 100)
-
-                                        if cozy > 80 {
-                                                                                        //fmt.Print(bottomitem, " ")
-                                                                                        piggy = append(piggy, bottomitem)
+                                        if int(cosine(a, b) * 100) > 80 {
+                                                matched_files = append(matched_files, bottomitem)
                                         }
                                 }
                         }
@@ -127,22 +122,22 @@ func main() {
                 new := arguments[1:]
                 arguments = new
 
-                                if len(piggy) > 1 {
-                                        repeat := 0
+                if len(matched_files) > 1 {
+                        repeat := 0
 
-                                        for _, rasher := range bacon {
-                                                if strings.Contains(rasher, strings.Join(piggy, " ")) {
-                                                        repeat = 1
-                                                }
-                                        }
-
-                                        if repeat == 0 {
-                                                bacon = append(bacon, strings.Join(piggy, " "))
-                                        }
+                        for _, set_file := range matched_set {
+                                if strings.Contains(set_file, strings.Join(matched_files, " ")) {
+                                        repeat = 1
                                 }
+                        }
+
+                        if repeat == 0 {
+                                matched_set = append(matched_set, strings.Join(matched_files, " "))
+                        }
+                }
         }
 
-                for _, rasher := range bacon {
-                        fmt.Println(rasher)
-                }
+        for _, set_file := range matched_set {
+                fmt.Println(set_file)
+        }
 }
