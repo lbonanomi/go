@@ -92,12 +92,15 @@ func cosine(a, b []string) (cosineSimilarity float64) {
 }
 
 func main() {
-
-        var pen []string
-
         arguments := os.Args[1:]
 
+        var matched_set []string
+
         for _, topitem := range arguments {
+                var matched_files []string
+
+                matched_files = append(matched_files, topitem)
+
                 for _, bottomitem := range arguments {
                         if topitem != bottomitem {
                                 topType, _ := os.Stat(topitem)
@@ -105,41 +108,36 @@ func main() {
 
                                 if topType.Mode().IsRegular() && botType.Mode().IsRegular() {
                                         aDat, _ := ioutil.ReadFile(topitem)
-                                        a := strings.Fields(string(aDat)) //, "\n")
+                                        a := strings.Fields(string(aDat))
 
                                         bDat, _ := ioutil.ReadFile(bottomitem)
-                                        b := strings.Fields(string(bDat)) //, "\n")
+                                        b := strings.Fields(string(bDat))
 
-                                        cozy := int(cosine(a, b) * 100)
-
-                                        if cozy > 85 {
-                                                topfound := 0
-                                                botfound := 0
-
-                                                for _, penned := range pen {
-                                                        if topitem == penned {
-                                                                topfound = 1
-                                                        }
-
-                                                        if bottomitem == penned {
-                                                                botfound = 1
-                                                        }
-                                                }
-
-                                                if topfound == 0 {
-                                                        pen = append(pen, topitem)
-                                                }
-
-                                                if botfound == 0 {
-                                                        pen = append(pen, bottomitem)
-                                                }
+                                        if int(cosine(a, b) * 100) > 80 {
+                                                matched_files = append(matched_files, bottomitem)
                                         }
                                 }
                         }
                 }
                 new := arguments[1:]
                 arguments = new
+
+                if len(matched_files) > 1 {
+                        repeat := 0
+
+                        for _, set_file := range matched_set {
+                                if strings.Contains(set_file, strings.Join(matched_files, " ")) {
+                                        repeat = 1
+                                }
+                        }
+
+                        if repeat == 0 {
+                                matched_set = append(matched_set, strings.Join(matched_files, " "))
+                        }
+                }
         }
 
-        fmt.Println(strings.Join(pen, " "))
+        for _, set_file := range matched_set {
+                fmt.Println(set_file)
+        }
 }
