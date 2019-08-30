@@ -5,6 +5,7 @@ import (
         "io/ioutil"
         "math"
         "os"
+                "sort"
         "strings"
 )
 
@@ -93,6 +94,7 @@ func cosine(a, b []string) (cosineSimilarity float64) {
 
 func main() {
         arguments := os.Args[1:]
+                sort.Strings(arguments)
 
         var matched_set []string
 
@@ -124,6 +126,8 @@ func main() {
 
                 if len(matched_files) > 1 {
                         repeat := 0
+
+                                                fmt.Println(matched_set)
 
                         for _, set_file := range matched_set {
                                 if strings.Contains(set_file, strings.Join(matched_files, " ")) {
