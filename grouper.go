@@ -126,9 +126,7 @@ func main() {
 
                 if len(matched_files) > 1 {
                         repeat := 0
-
-                                                fmt.Println(matched_set)
-
+                        
                         for _, set_file := range matched_set {
                                 if strings.Contains(set_file, strings.Join(matched_files, " ")) {
                                         repeat = 1
