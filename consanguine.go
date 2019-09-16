@@ -92,11 +92,23 @@ func cosine(a, b []string) (cosineSimilarity float64) {
 }
 
 func main() {
+        _,a_presence := os.Stat(os.Args[1])
+        if a_presence != nil {
+                fmt.Println("No such file: ", os.Args[1])
+                os.Exit(1)
+        }
+
+        _,b_presence := os.Stat(os.Args[2])
+        if b_presence != nil {
+                fmt.Println("No such file: ", os.Args[2])
+                os.Exit(1)
+        }
+
         aDat,_ := ioutil.ReadFile(os.Args[1])
-        a := strings.Fields(string(aDat)) //, "\n")
+        a := strings.Fields(strings.ToLower(string(aDat)))
 
         bDat,_ := ioutil.ReadFile(os.Args[2])
-        b := strings.Fields(string(bDat)) //, "\n")
+        b := strings.Fields(strings.ToLower(string(bDat)))
 
         cozy := int(cosine(a, b) * 100)
         fmt.Println(cozy)
