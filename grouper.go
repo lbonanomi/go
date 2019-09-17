@@ -94,15 +94,11 @@ func cosine(a, b []string) (cosineSimilarity float64) {
 
 func main() {
         arguments := os.Args[1:]
-                sort.Strings(arguments)
+        sort.Strings(arguments)
 
-        var matched_set []string
+        var matched_files []string
 
         for _, topitem := range arguments {
-                var matched_files []string
-
-                matched_files = append(matched_files, topitem)
-
                 for _, bottomitem := range arguments {
                         if topitem != bottomitem {
                                 topType, _ := os.Stat(topitem)
@@ -116,30 +112,29 @@ func main() {
                                         b := strings.Fields(string(bDat))
 
                                         if int(cosine(a, b) * 100) > 80 {
-                                                matched_files = append(matched_files, bottomitem)
+                                                var stored_buffer []string
+
+                                                for _,stored := range matched_files {
+                                                        if stored != bottomitem {
+                                                                stored_buffer = append(stored_buffer, stored)
+                                                        }
+                                                }
+                                                stored_buffer = append(stored_buffer, bottomitem)
+
+                                                matched_files = stored_buffer
                                         }
                                 }
                         }
                 }
-                new := arguments[1:]
-                arguments = new
 
-                if len(matched_files) > 1 {
-                        repeat := 0
-                        
-                        for _, set_file := range matched_set {
-                                if strings.Contains(set_file, strings.Join(matched_files, " ")) {
-                                        repeat = 1
-                                }
-                        }
-
-                        if repeat == 0 {
-                                matched_set = append(matched_set, strings.Join(matched_files, " "))
+                var trim_buffer []string
+                for _, dropme := range arguments {
+                        if dropme != topitem {
+                                trim_buffer = append(trim_buffer, dropme)
                         }
                 }
+                arguments = trim_buffer
         }
 
-        for _, set_file := range matched_set {
-                fmt.Println(set_file)
-        }
+        fmt.Println(matched_files)
 }
