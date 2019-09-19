@@ -94,9 +94,10 @@ func cosine(a, b []string) (cosineSimilarity float64) {
 
 func main() {
         arguments := os.Args[1:]
-                sort.Strings(arguments)
+        sort.Strings(arguments)
 
-        var matched_set []string
+        var pairings map[string]string
+        pairings = make(map[string]string)
 
         for _, topitem := range arguments {
                 var matched_files []string
@@ -115,31 +116,56 @@ func main() {
                                         bDat, _ := ioutil.ReadFile(bottomitem)
                                         b := strings.Fields(string(bDat))
 
-                                        if int(cosine(a, b) * 100) > 80 {
-                                                matched_files = append(matched_files, bottomitem)
+                                        if int(cosine(a, b)*100) > 80 {
+                                                pairings[topitem] = bottomitem
                                         }
                                 }
                         }
                 }
-                new := arguments[1:]
-                arguments = new
-
-                if len(matched_files) > 1 {
-                        repeat := 0
-                        
-                        for _, set_file := range matched_set {
-                                if strings.Contains(set_file, strings.Join(matched_files, " ")) {
-                                        repeat = 1
-                                }
-                        }
-
-                        if repeat == 0 {
-                                matched_set = append(matched_set, strings.Join(matched_files, " "))
-                        }
-                }
         }
 
-        for _, set_file := range matched_set {
-                fmt.Println(set_file)
+        var chatter []string
+
+        // Group individual pairs into larger sets
+        //
+
+        for _, index := range pairings {
+                var groups []string
+
+                groups = append(groups, "")
+
+                for a, b := range pairings {
+                        if b == index && groups[len(groups)-1] != a {
+                                groups = append(groups, a)
+                        }
+                        if a == index && groups[len(groups)-1] != b {
+                                groups = append(groups, b)
+                        }
+
+                        sort.Strings(groups)
+                }
+
+                groups = append(groups, index)
+
+                sort.Strings(groups)
+
+                group := strings.Join(groups, " ")
+
+                // This process is repetitive
+                //
+
+                chattering := 0
+
+                for _, repeated := range chatter {
+                        if strings.Contains(repeated, group) {
+                                chattering = 1
+                        }
+                }
+
+                chatter = append(chatter, group)
+
+                if chattering == 0 {
+                        fmt.Println(group)
+                }
         }
 }
