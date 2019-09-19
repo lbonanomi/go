@@ -92,13 +92,19 @@ func cosine(a, b []string) (cosineSimilarity float64) {
         return
 }
 
+
 func main() {
         arguments := os.Args[1:]
         sort.Strings(arguments)
 
-        var matched_files []string
+        var pairings map[string]string
+        pairings = make(map[string]string)
 
         for _, topitem := range arguments {
+                var matched_files []string
+
+                matched_files = append(matched_files, topitem)
+
                 for _, bottomitem := range arguments {
                         if topitem != bottomitem {
                                 topType, _ := os.Stat(topitem)
@@ -112,29 +118,47 @@ func main() {
                                         b := strings.Fields(string(bDat))
 
                                         if int(cosine(a, b) * 100) > 80 {
-                                                var stored_buffer []string
-
-                                                for _,stored := range matched_files {
-                                                        if stored != bottomitem {
-                                                                stored_buffer = append(stored_buffer, stored)
-                                                        }
-                                                }
-                                                stored_buffer = append(stored_buffer, bottomitem)
-
-                                                matched_files = stored_buffer
+                                                pairings[topitem] = bottomitem
                                         }
                                 }
                         }
                 }
-
-                var trim_buffer []string
-                for _, dropme := range arguments {
-                        if dropme != topitem {
-                                trim_buffer = append(trim_buffer, dropme)
-                        }
-                }
-                arguments = trim_buffer
         }
 
-        fmt.Println(matched_files)
+                var chatter [] string
+
+        for _,index := range(pairings) {
+                var groups []string
+
+                                //groups = append(groups, index)
+                                groups = append(groups, "")
+
+                for a,b := range(pairings) {
+                        if b == index && groups[len(groups)-1] != a {
+                                                        groups = append(groups, a)
+                        }
+                                                if a == index && groups[len(groups)-1] != b {
+                                                        groups = append(groups, b)
+                                                }
+
+                                                sort.Strings(groups)
+                }
+
+                                groups = append(groups, index)
+
+                                group := strings.Join(groups, " ")
+
+                                chattering := 0
+                                for _,repeated := range(chatter) {
+                                        if group == repeated {
+                                                chattering = 1
+                                        }
+                                }
+
+                                chatter = append(chatter, group)
+
+                                if chattering == 0 {
+                                        fmt.Println(group)
+                                }
+        }
 }
