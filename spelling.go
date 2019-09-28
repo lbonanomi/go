@@ -4,7 +4,7 @@ import (
         "fmt"
         "io/ioutil"
         "strings"
-        //"github.com/agnivade/levenshtein"
+        "github.com/agnivade/levenshtein"
 )
 
 func known_words()(dict []string) {
@@ -24,16 +24,25 @@ func find_word(wanted string, known []string)(gotcha bool) {
         return(false)
 }
 
-func main() {
-        //distance := levenshtein.ComputeDistance(a, b)
+func find_possibles(have string, known []string)(candidates []string) {
+        for _, known_word := range(known) {
+                distance := levenshtein.ComputeDistance(known_word, have)
 
+                if distance <= 2 {
+                        candidates = append(candidates, known_word)
+                }
+        }
+        return(candidates)
+}
+
+func main() {
         words := known_words()
 
         input,_ := ioutil.ReadFile("/home/ec2-user/loren")
 
         for _,word := range(strings.Fields(string(input))) {
                 if !find_word(word, words) {
-                        fmt.Println("DIST", word)
+                        fmt.Println("Couldn't find", word, "how-about: ", find_possibles(word, words))
                 }
         }
 }
