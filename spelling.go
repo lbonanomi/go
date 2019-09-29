@@ -3,6 +3,7 @@ package main
 import (
         "fmt"
         "io/ioutil"
+        "os"
         "strings"
         "github.com/agnivade/levenshtein"
 )
@@ -28,8 +29,10 @@ func find_possibles(have string, known []string)(candidates []string) {
         for _, known_word := range(known) {
                 distance := levenshtein.ComputeDistance(known_word, have)
 
-                if distance <= 2 {
-                        candidates = append(candidates, known_word)
+                if distance <= 1 {
+                        if string(known_word[0]) == string(have[0]) {
+                                candidates = append(candidates, known_word)
+                        }
                 }
         }
         return(candidates)
@@ -38,9 +41,11 @@ func find_possibles(have string, known []string)(candidates []string) {
 func main() {
         words := known_words()
 
-        input,_ := ioutil.ReadFile("/home/ec2-user/loren")
+        input,_ := ioutil.ReadFile(os.Args[1])
 
         for _,word := range(strings.Fields(string(input))) {
+
+                word = strings.ReplaceAll(word, ".", "")
                 if !find_word(word, words) {
                         fmt.Println("Couldn't find", word, "how-about: ", find_possibles(word, words))
                 }
