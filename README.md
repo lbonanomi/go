@@ -1,4 +1,4 @@
-# Scripts
+# go
 
 > Luke, it's 2019...  
 > -Many, many coworkers  
@@ -13,4 +13,4 @@ I'm porting my legacy [script grab-bag](https://github.com/lbonanomi/scripts/blo
 
 [suwho.go](suwho.go): clone of [suwho.sh](https://github.com/lbonanomi/scripts/blob/master/suwho.sh)
 
-[revisionist.go](https://github.com/lbonanomi/go/blob/master/revisionist.go): A naive utility to censor credentials in command history. Discussed at length in a [Dev.to article](https://dev.to/lbonanomi/sterilizing-bash-history-5455)
+[revisionist.go](https://github.com/lbonanomi/go/blob/master/revisionist.go): A naive utility to censor credentials in command history. Discussed at length in a [Dev.to article](https://dev.to/lbonanomi/sterilizing-bash-history-5455), and seeing a burst of interest thanks to a link-back from [The Book of Secret Knowledge](https://github.com/trimstray/the-book-of-secret-knowledge)
