@@ -35,13 +35,12 @@ func append_netrc(machine string, login string, password string)() {
 }
 
 func curl_u(cmdline string)(after string) {
-    curl := regexp.MustCompile(`:\S+?\s+`)
+        //:\w+?\S+\b
+    curl := regexp.MustCompile(`:\w+?\S+\b`)
 
     token := strings.Trim(curl.FindString(cmdline), ":")
 
     if len(token) > 0 {
-        fmt.Println("PASS:", token)
-
         // If a valid token is found, try and extract username and host
         // and append to ~/.netrc
 
@@ -50,8 +49,6 @@ func curl_u(cmdline string)(after string) {
 
         url_regex := regexp.MustCompile(`:\/\/(\S+\.\w*)`)
         url := strings.Trim(url_regex.FindString(cmdline), ":/")
-
-        fmt.Println("Append", url, user, token, " to netrc")
 
         append_netrc(url, user, token)
     }
