@@ -35,7 +35,6 @@ func append_netrc(machine string, login string, password string)() {
 }
 
 func curl_u(cmdline string)(after string) {
-        //:\w+?\S+\b
     curl := regexp.MustCompile(`:\w+?\S+\b`)
 
     token := strings.Trim(curl.FindString(cmdline), ":")
@@ -51,6 +50,10 @@ func curl_u(cmdline string)(after string) {
         url := strings.Trim(url_regex.FindString(cmdline), ":/")
 
         append_netrc(url, user, token)
+
+        curln := regexp.MustCompile(`\-u\s+\S+:\w+?\S+\b`)
+        after = curln.ReplaceAllString(cmdline, "-n ")
+        return
     }
 
     after = curl.ReplaceAllString(cmdline, ":REDACTED ")
@@ -83,7 +86,7 @@ func main() {
         newtext := ""
 
         for _, word := range(strings.Fields(text)[1:]) {    // Remove history line number
-            newtext = newtext + " " + word                  //
+            newtext = newtext + " " + word                //
         }
 
         // Redact credential patterns
