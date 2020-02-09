@@ -51,7 +51,7 @@ func curl_u(cmdline string)(after string) {
 
         append_netrc(url, user, token)
 
-        curln := regexp.MustCompile(`\-u\s+\S+:\w+?\S+\b`)
+        curln := regexp.MustCompile(`\-u\s+\S*:\w+?\S+\b`)
         after = curln.ReplaceAllString(cmdline, "-n ")
         return
     }
