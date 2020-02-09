@@ -1,4 +1,3 @@
--bash-4.3$ cat *.go
 package main
 
 import (
@@ -36,11 +35,13 @@ func append_netrc(machine string, login string, password string)() {
 }
 
 func curl_u(cmdline string)(after string) {
-    curl := regexp.MustCompile(`:\S+?\s+\b`)
+    curl := regexp.MustCompile(`:\S+?\s+`)
 
     token := strings.Trim(curl.FindString(cmdline), ":")
 
     if len(token) > 0 {
+        fmt.Println("PASS:", token)
+
         // If a valid token is found, try and extract username and host
         // and append to ~/.netrc
 
@@ -49,6 +50,8 @@ func curl_u(cmdline string)(after string) {
 
         url_regex := regexp.MustCompile(`:\/\/(\S+\.\w*)`)
         url := strings.Trim(url_regex.FindString(cmdline), ":/")
+
+        fmt.Println("Append", url, user, token, " to netrc")
 
         append_netrc(url, user, token)
     }
@@ -98,4 +101,3 @@ func main() {
         fmt.Println(text)
     }
 }
--bash-4.3$
