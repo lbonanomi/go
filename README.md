@@ -18,6 +18,3 @@ This repository is on the bag-of-scripts model as opposed to an importable `go g
 [revisionist.go](https://github.com/lbonanomi/go/blob/master/revisionist.go): A naive utility to censor credentials in command history. Discussed at length in a [Dev.to article](https://dev.to/lbonanomi/sterilizing-bash-history-5455), and seeing a burst of interest thanks to a link-back from [The Book of Secret Knowledge](https://github.com/trimstray/the-book-of-secret-knowledge)
 
 [suwho.go](suwho.go): clone of [suwho.sh](https://github.com/lbonanomi/scripts/blob/master/suwho.sh)
-
-<!-- Yep, i'm collecting your IP address. -->
-<img src="https://evening-spire-71333.herokuapp.com/">
