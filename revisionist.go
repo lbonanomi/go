@@ -1,3 +1,7 @@
+// Please see discussion and usage instructions at
+// https://dev.to/lbonanomi/sterilizing-bash-history-5455
+//
+
 package main
 
 import (
